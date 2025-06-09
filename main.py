@@ -24,6 +24,11 @@ class SortStep(BaseModel):
     compared: List[int]
 
 
+@app.get("/")
+def read_root():
+    return {"message": "Backend de algoritmos rodando! Use /bubble-sort com POST."}
+
+
 @app.post("/bubble-sort", response_model=List[SortStep])
 def bubble_sort(data: SortRequest):
     steps = []

@@ -1,3 +1,4 @@
+import random
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -40,4 +41,23 @@ def bubble_sort(data: SortRequest):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
                 steps.append(SortStep(array=arr[:], compared=[j, j + 1]))
+    return steps
+
+
+@app.post("/bogo-sort", response_model=List[SortStep])
+def bogo_sort(data: SortRequest):
+    steps = []
+    arr = data.array[:]
+
+    def is_sorted(array):
+        for i in range(len(array) - 1):
+            if array[i] > array[i + 1]:
+                return False
+        return True
+
+    while not is_sorted(arr):
+        steps.append(SortStep(array=arr[:], compared=[]))
+        random.shuffle(arr)
+        steps.append(SortStep(array=arr[:], compared=[]))
+    steps.append(SortStep(array=arr[:], compared=[]))
     return steps

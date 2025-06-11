@@ -1,12 +1,15 @@
-import random
+# main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from typing import List
+
+
+import sorts
+from sorts.models import SortRequest, SortStep
+from sorts.sorts import bubble_sort, selection_sort, bogo_sort
 
 app = FastAPI()
 
-# Libera CORS para o frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,48 +19,21 @@ app.add_middleware(
 )
 
 
-class SortRequest(BaseModel):
-    array: List[int]
-
-
-class SortStep(BaseModel):
-    array: List[int]
-    compared: List[int]
-
-
 @app.get("/")
 def read_root():
     return {"message": "Backend de algoritmos rodando! Use /bubble-sort com POST."}
 
 
 @app.post("/bubble-sort", response_model=List[SortStep])
-def bubble_sort(data: SortRequest):
-    steps = []
-    arr = data.array[:]
-    n = len(arr)
-    for i in range(n):
-        for j in range(n - i - 1):
-            steps.append(SortStep(array=arr[:], compared=[j, j + 1]))
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-                steps.append(SortStep(array=arr[:], compared=[j, j + 1]))
-    return steps
+def bubble_sort_route(data: SortRequest):
+    return bubble_sort(data)
+
+
+@app.post("/selection-sort", response_model=List[SortStep])
+def selection_sort_route(data: SortRequest):
+    return selection_sort(data)
 
 
 @app.post("/bogo-sort", response_model=List[SortStep])
-def bogo_sort(data: SortRequest):
-    steps = []
-    arr = data.array[:]
-
-    def is_sorted(array):
-        for i in range(len(array) - 1):
-            if array[i] > array[i + 1]:
-                return False
-        return True
-
-    while not is_sorted(arr):
-        steps.append(SortStep(array=arr[:], compared=[]))
-        random.shuffle(arr)
-        steps.append(SortStep(array=arr[:], compared=[]))
-    steps.append(SortStep(array=arr[:], compared=[]))
-    return steps
+def bogo_sort_route(data: SortRequest):
+    return bogo_sort(data)

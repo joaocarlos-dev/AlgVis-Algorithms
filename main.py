@@ -6,7 +6,7 @@ from typing import List
 
 import sorts
 from sorts.models import SortRequest, SortStep
-from sorts.sorts import bubble_sort, selection_sort, bogo_sort
+from sorts.sorts import bubble_sort, insertion_sort, selection_sort, bogo_sort
 
 app = FastAPI()
 
@@ -37,3 +37,8 @@ def selection_sort_route(data: SortRequest):
 @app.post("/bogo-sort", response_model=List[SortStep])
 def bogo_sort_route(data: SortRequest):
     return bogo_sort(data)
+
+
+@app.post("/insertion-sort", response_model=List[SortStep])
+def insertion_sort_route(data: SortRequest):
+    return insertion_sort(data)

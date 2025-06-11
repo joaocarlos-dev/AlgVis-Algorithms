@@ -49,3 +49,33 @@ def selection_sort(data: SortRequest) -> List[SortStep]:
         arr[i], arr[minpos] = arr[minpos], arr[i]
         steps.append(SortStep(array=arr[:], compared=[i, minpos]))
     return steps
+
+
+def insertion_sort(data: SortRequest) -> List[SortStep]:
+    steps = []
+    arr = data.array[:]
+
+    for i in range(1, len(arr)):
+        key_item = arr[i]
+        j = i - 1
+
+        # Registra a primeira comparação (elemento atual com o anterior)
+        steps.append(SortStep(array=arr[:], compared=[j, i]))
+
+        while j >= 0 and arr[j] > key_item:
+            # Move o elemento maior para a direita
+            arr[j + 1] = arr[j]
+            # Registra o movimento (destaca o índice movido)
+            steps.append(SortStep(array=arr[:], compared=[j]))
+
+            j -= 1
+            # Registra a próxima comparação (se ainda houver elementos)
+            if j >= 0:
+                steps.append(SortStep(array=arr[:], compared=[j, j + 1]))
+
+        # Insere o elemento na posição correta
+        arr[j + 1] = key_item
+        # Registra a posição final do elemento
+        steps.append(SortStep(array=arr[:], compared=[j + 1]))
+
+    return steps

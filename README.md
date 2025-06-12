@@ -10,10 +10,9 @@ Desenvolver uma API robusta utilizando Python e FastAPI que:
 
 - Implementa algoritmos de ordenação e estruturas de dados
 - Fornece endpoints para visualização passo a passo
-- Calcula métricas de desempenho (complexidade, tempo de execução)
 - Serve como engine para o frontend do AlgVis
 
 ## Tecnologias
 
-- Python 3.10+
+- Python
 - FastAPI
